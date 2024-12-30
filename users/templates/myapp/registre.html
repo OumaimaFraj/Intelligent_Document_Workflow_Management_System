@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        form {
+            background: #fff;
+            max-width: 400px;
+            width: 100%;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(173, 149, 107, 0.1);
+        }
+        h2 {
+            color: #AD956B;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #AD956B;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #AD956B;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23AD956B' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+        }
+        button {
+            background-color: #AD956B;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #8C7A59;
+        }
+        .error {
+            color: #AD956B;
+            margin-bottom: 16px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <form method="POST" action="{% url 'register' %}">
+        <h2>Register</h2>
+        {% csrf_token %}
+        {% if errors %}
+            <div class="error">
+                {% for error in errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" value="{{ email|default:'' }}" required>
+
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" value="{{ username|default:'' }}" required>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+
+        <label for="role">Role:</label>
+        <select id="role" name="role">
+            <option value="Employee" {% if role == "Employee" %}selected{% endif %}>Employee</option>
+            <option value="HR Manager" {% if role == "HR Manager" %}selected{% endif %}> HR Manager</option>
+            <option value="Finance Manager" {% if role == "Finance Manager" %}selected{% endif %}>Finance Manager</option>
+            <option value="IT Manager" {% if role == "IT Manager" %}selected{% endif %}>IT Manager</option>
+        </select>
+
+        <label for="language">Language:</label>
+        <select id="language" name="language">
+            <option value="English" {% if language == "English" %}selected{% endif %}>English</option>
+            <option value="French" {% if language == "French" %}selected{% endif %}>French</option>
+            <option value="Spanish" {% if language == "Spanish" %}selected{% endif %}>Spanish</option>
+        </select>
+
+        <button type="submit">Register</button>
+    </form>
+</body>
+</html>
+

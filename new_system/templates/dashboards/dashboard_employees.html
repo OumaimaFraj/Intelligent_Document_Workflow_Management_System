@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Management System</title>
+    <style>
+        /* General styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f0e8;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        
+        /* Main structure */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Header */
+        header {
+            background-color: #AD956B;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+        
+        /* Main title */
+        h1 {
+            color: white;
+            font-size: 2.5em;
+            margin: 0;
+            padding: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        /* Main content */
+        main {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+        }
+        
+        /* Sections */
+        section {
+            width: 100%;
+            max-width: 600px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(173, 149, 107, 0.1);
+            padding: 30px;
+        }
+        
+        /* Titles */
+        h2 {
+            color: #AD956B;
+            margin-top: 0;
+        }
+        
+        /* Form */
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        label {
+            margin-bottom: 5px;
+            color: #AD956B;
+        }
+        
+        input {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #AD956B;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        /* Buttons and links */
+        .button {
+            background-color: #AD956B;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .button:hover {
+            background-color: #8c7a59;
+        }
+
+        input[type="file"] {
+            background-color: #AD956B;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        input[type="file"]::before {
+            content: 'Choose File';
+            display: inline-block;
+            color: white;
+            background-color: #AD956B;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        input[type="file"]::-webkit-file-upload-button {
+            visibility: hidden;
+        }
+
+        input[type="file"]:hover::before {
+            background-color: #8c7a59;
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px 0;
+            background-color: #e6dfd1;
+            color: #AD956B;
+        }
+
+        /* Navbar */
+        nav {
+            background-color: #8c7a59;
+            padding: 10px 0;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #e6dfd1;
+        }
+
+        /* Align file input and button */
+        .file-upload {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .file-upload input[type="file"] {
+            padding: 4px 5px;
+            font-size: 14px;
+            margin-right: 55px;
+        }
+
+        .file-upload button.button {
+            padding: 14px 5px;
+            font-size: 14px;
+            margin-top: -15px;
+        }
+
+        .alert {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Document Management System</h1>
+        </header>
+
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="{% url 'login' %}">Logout</a></li>
+            </ul>
+        </nav>
+        <main>
+            <section id="new-document">
+                <h2>Add a New Document</h2>
+                <form action="{% url 'upload_file' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <label for="title">Title:</label>
+                    <input type="text" id="title" name="title" required>
+                    <div class="file-upload">
+                        <label for="document_pdf">Choose Document (PDF):</label>
+                        <input type="file" id="document_pdf" name="document_pdf" accept="application/pdf" required>
+                        
+                        <button type="submit" class="button">Add Document</button>
+                    </div>
+                </form>
+            </section>
+        </main>
+        <footer>
+            <p>&copy; 2024 Document Management System. All rights reserved.</p>
+        </footer>
+    </div>
+    {% if messages %}
+    <div class="alert">
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <script>
+        document.getElementById('documentForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+    
+            const formData = new FormData();
+            formData.append('title', document.getElementById('title').value);
+            formData.append('document_pdf', document.getElementById('document_pdf').files[0]);
+    
+            fetch('/new_system/add_document/', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Document ajouté avec succès!');
+                console.log(data);
+            })
+            .catch(error => {
+                alert('Erreur lors de l\'ajout du document');
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
